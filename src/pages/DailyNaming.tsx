@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { Calendar, Award } from 'lucide-react';
+import { Calendar, Award, Star } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 
 export function DailyNaming() {
@@ -25,72 +25,80 @@ export function DailyNaming() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500 max-w-4xl mx-auto">
       <header className="text-center mb-12">
-        <div className="w-16 h-16 bg-[#111] border border-[#333] rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <Award className="w-8 h-8 text-[#00FF00]" />
+        <div className="w-20 h-20 bg-[var(--panel)] border-[3px] border-[var(--secondary)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(255,184,0,0.2)]">
+          <Award className="w-10 h-10 text-[var(--secondary)]" />
         </div>
-        <h2 className="text-3xl font-bold tracking-tight">每日命名</h2>
-        <p className="text-[#888] mt-2">定义你的个人叙事。用你最大的胜利来命名这一天。</p>
+        <h2 className="text-4xl font-display font-bold tracking-tight text-gradient">多巴胺提取机 (Dopamine Wins)</h2>
+        <p className="text-[var(--text-dim)] mt-3">ADHD 大脑需要极强的正反馈。每天至少记录一个微小的胜利，不管多小！</p>
       </header>
 
-      <div className="bg-[#111] border border-[#00FF00]/30 rounded-2xl p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#00FF00]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="bg-[var(--panel)] border-2 border-[var(--secondary)]/50 rounded-2xl p-8 relative overflow-hidden shadow-[0_0_40px_rgba(255,184,0,0.1)]">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--secondary)]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
         
-        <h3 className="text-xl font-bold mb-6 flex items-center gap-2 relative z-10">
-          <Calendar className="w-5 h-5 text-[#00FF00]" />
-          今日：{format(new Date(), 'yyyy年MM月dd日')}
+        <h3 className="text-xl font-bold font-display uppercase tracking-wider mb-6 flex items-center gap-2 relative z-10 text-[var(--secondary)]">
+          <Star className="w-5 h-5 fill-current" />
+          封存高光时刻：{format(new Date(), 'yyyy年MM月dd日')}
         </h3>
 
         <form onSubmit={handleSave} className="space-y-6 relative z-10">
           <div>
-            <label className="block text-sm font-mono text-[#888] mb-2 uppercase">今日命名</label>
+            <label className="block text-sm font-mono text-[var(--text-dim)] mb-2 uppercase tracking-wide">今日最大的那个胜利！</label>
             <input 
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="例如：伟大的重构之日"
-              className="w-full bg-[#050505] border border-[#333] rounded-lg px-6 py-4 text-2xl font-bold text-white focus:border-[#00FF00] focus:outline-none transition-colors"
+              placeholder="例如：终于叠好了那堆衣服、回了一封讨厌的邮件"
+              className="w-full bg-[var(--bg-dark)] border-2 border-[var(--border)] rounded-xl px-6 py-4 text-3xl font-display font-bold text-[var(--text-main)] focus:border-[var(--secondary)] focus:shadow-[0_0_15px_rgba(255,184,0,0.3)] focus:outline-none transition-all"
             />
           </div>
           <div>
-            <label className="block text-sm font-mono text-[#888] mb-2 uppercase">核心成就</label>
+            <label className="block text-sm font-mono text-[var(--text-dim)] mb-2 uppercase tracking-wide">尽情夸夸自己！(因为你值得)</label>
             <textarea 
               value={achievement}
               onChange={(e) => setAchievement(e.target.value)}
-              placeholder="是什么具体行动赢得了这个名字？"
-              className="w-full bg-[#050505] border border-[#333] rounded-lg px-6 py-4 text-[#ccc] focus:border-[#00FF00] focus:outline-none transition-colors h-32 resize-none"
+              placeholder="哪怕中间分心了100次，但我最后还是做到了！写下这种感觉..."
+              className="w-full bg-[var(--bg-dark)] border-2 border-[var(--border)] rounded-xl px-6 py-4 text-[var(--text-muted)] focus:border-[var(--secondary)] focus:shadow-[0_0_15px_rgba(255,184,0,0.3)] focus:outline-none transition-all h-32 resize-none leading-relaxed"
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4">
             <button 
               type="submit"
-              className="bg-[#00FF00] text-black px-8 py-3 rounded-md font-bold hover:bg-[#00cc00] transition-colors"
+              className="bg-[var(--secondary)] text-[var(--bg-main)] px-10 py-4 rounded-xl font-bold uppercase tracking-widest hover:brightness-110 hover:shadow-[0_0_20px_var(--secondary)] transition-all flex items-center gap-3"
             >
-              封存今日
+              <Award className="w-5 h-5" />
+              提取多巴胺！
             </button>
           </div>
         </form>
       </div>
 
-      <div className="mt-16">
-        <h3 className="text-lg font-mono text-[#888] uppercase tracking-wider mb-6">编年史</h3>
-        <div className="space-y-4">
+      <div className="mt-20">
+        <h3 className="text-lg font-mono text-[var(--secondary)] uppercase tracking-wider mb-8 flex items-center gap-3">
+          <div className="h-px bg-gradient-to-r from-transparent to-[var(--secondary)] flex-1 opacity-50" />
+          <span>多巴胺历史库 (Dopamine Vault)</span>
+          <div className="h-px bg-gradient-to-l from-transparent to-[var(--secondary)] flex-1 opacity-50" />
+        </h3>
+        
+        <div className="space-y-6">
           {pastDays.map(date => {
             const record = dailyRecords[date];
             return (
-              <div key={date} className="flex gap-6 items-stretch">
-                <div className="w-24 shrink-0 flex flex-col items-end justify-center border-r border-[#333] pr-6 py-4">
-                  <div className="text-sm font-bold text-[#e5e5e5]">{format(new Date(date), 'MMM d')}</div>
-                  <div className="text-xs text-[#666]">{format(new Date(date), 'EEEE')}</div>
+              <div key={date} className="flex gap-6 items-center group">
+                <div className="w-32 shrink-0 flex flex-col items-end justify-center border-r-[3px] border-[var(--border)] group-hover:border-[var(--secondary)] transition-colors pr-6 py-4">
+                  <div className="text-sm font-display font-bold text-[var(--text-main)]">{format(new Date(date), 'MMM d')}</div>
+                  <div className="text-xs font-mono text-[var(--text-dark)] mt-1">{format(new Date(date), 'EEEE')}</div>
                 </div>
                 <div className="flex-1 py-4">
                   {record ? (
-                    <div>
-                      <h4 className="text-xl font-bold text-[#00FF00] mb-1">"{record.name}"</h4>
-                      <p className="text-[#888] text-sm">{record.achievement}</p>
+                    <div className="bg-[var(--panel)] p-6 rounded-2xl border border-[var(--border-light)] group-hover:border-[var(--secondary)] transition-all">
+                      <h4 className="text-2xl font-display font-bold text-[var(--secondary)] mb-2 tracking-wide">
+                        🏆 {record.name}
+                      </h4>
+                      <p className="text-[var(--text-muted)] text-sm leading-relaxed">{record.achievement}</p>
                     </div>
                   ) : (
-                    <div className="h-full flex items-center text-[#444] text-sm italic">
-                      未记录
+                    <div className="h-full flex items-center text-[var(--border-light)] text-sm italic font-mono px-6">
+                      // 空白之日 (未记录多巴胺)
                     </div>
                   )}
                 </div>

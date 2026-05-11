@@ -50,7 +50,7 @@ export function VoiceCoach() {
           speechConfig: {
             voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } },
           },
-          systemInstruction: "你是一个名为 SteadState 的自我工程工具的语音教练。你的任务是帮助用户反思他们的习惯，执行回溯分析，并建立定式。你的语气应该像一个专业的工程师或教练：冷静、客观、理性、不带评判性。不要说鸡汤，直接切入核心问题。用中文回答。",
+          systemInstruction: "你是一个专门为 ADHD (注意力缺陷多动障碍) 用户设计的 AI 语音教练。你的任务是提供温和的陪伴、启动任务的鼓励、以及在他们分心时把他们拉回来的无评判引导。避免说教，用极简的步骤指导。用中文回答。",
         },
         callbacks: {
           onopen: async () => {
@@ -235,11 +235,11 @@ export function VoiceCoach() {
         const height = canvas.height;
         
         // Clean background
-        ctx.fillStyle = '#0a0a0a';
+        ctx.fillStyle = 'var(--bg-main)';
         ctx.fillRect(0, 0, width, height);
 
         // Draw guide lines
-        ctx.strokeStyle = '#1a1a1a';
+        ctx.strokeStyle = 'var(--panel-hover)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(0, height * 0.25);
@@ -251,7 +251,7 @@ export function VoiceCoach() {
         const drawWaveform = (analyser: AnalyserNode | null, color: string, centerY: number, maxAmplitude: number) => {
           if (!analyser) {
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#333';
+            ctx.strokeStyle = 'var(--border)';
             ctx.beginPath();
             ctx.moveTo(0, centerY);
             ctx.lineTo(width, centerY);
@@ -285,11 +285,11 @@ export function VoiceCoach() {
         };
 
         // Output (AI) - Top Half
-        drawWaveform(outputAnalyserRef.current, '#00FF00', height * 0.25, height * 0.2);
+        drawWaveform(outputAnalyserRef.current, 'var(--primary)', height * 0.25, height * 0.2);
         // Input (User) - Bottom Half
         drawWaveform(inputAnalyserRef.current, '#FFFFFF', height * 0.75, height * 0.2);
         
-        ctx.fillStyle = '#666';
+        ctx.fillStyle = 'var(--text-dark)';
         ctx.font = '10px monospace';
         ctx.fillText('AI OUTPUT', 10, height * 0.25 - height * 0.2 - 5);
         ctx.fillText('USER INPUT', 10, height * 0.75 - height * 0.2 - 5);
@@ -303,19 +303,19 @@ export function VoiceCoach() {
     <div className="max-w-2xl mx-auto space-y-8">
       <header>
         <h1 className="text-3xl font-bold tracking-tighter uppercase flex items-center gap-3">
-          <Activity className="w-8 h-8 text-[#00FF00]" />
-          语音教练 (Voice Coach)
+          <Activity className="w-8 h-8 text-[var(--primary)]" />
+          <span className="text-gradient">语音引导员 (Voice Guide)</span>
         </h1>
-        <p className="text-[#888] mt-2">
-          与 SteadState 语音教练进行实时对话，进行习惯反思与回溯分析。
+        <p className="text-[var(--text-dim)] mt-2">
+          开启语音陪伴，聊聊今天想做什么，或者在觉得 overwhelmed（不知所措）的时候听听引导，轻松启动。
         </p>
       </header>
 
-      <div className="bg-[#111] border border-[#222] rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden">
+      <div className="bg-[var(--panel)] border border-[var(--border-light)] rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden">
         {/* Background animation when connected */}
         {isConnected && (
           <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-            <div className="w-64 h-64 bg-[#00FF00] rounded-full blur-[100px] animate-pulse" />
+            <div className="w-64 h-64 bg-[var(--primary)] rounded-full blur-[100px] animate-pulse" />
           </div>
         )}
 
@@ -325,10 +325,10 @@ export function VoiceCoach() {
             disabled={isConnecting}
             className={`w-32 h-32 rounded-full flex items-center justify-center transition-all duration-300 ${
               isConnected 
-                ? 'bg-[#1a1a1a] border-2 border-[#00FF00] text-[#00FF00] shadow-[0_0_30px_rgba(0,255,0,0.2)]' 
+                ? 'bg-[var(--panel-hover)] border-2 border-[var(--primary)] text-[var(--primary)] shadow-[0_0_30px_var(--primary)]' 
                 : isConnecting
-                  ? 'bg-[#1a1a1a] border border-[#333] text-[#888]'
-                  : 'bg-[#00FF00] text-black hover:bg-[#00cc00] hover:scale-105'
+                  ? 'bg-[var(--panel-hover)] border border-[var(--border)] text-[var(--text-dim)]'
+                  : 'bg-[var(--primary)] text-[var(--bg-main)] hover:bg-[var(--primary-hover)] hover:scale-105'
             }`}
           >
             {isConnecting ? (
@@ -344,7 +344,7 @@ export function VoiceCoach() {
             <h3 className="text-xl font-medium">
               {isConnecting ? '正在连接...' : isConnected ? '正在聆听' : '点击开始对话'}
             </h3>
-            <p className="text-sm text-[#666]">
+            <p className="text-sm text-[var(--text-dark)]">
               {isConnected ? '请直接说话，教练会实时回应' : '需要麦克风权限'}
             </p>
           </div>
@@ -361,7 +361,7 @@ export function VoiceCoach() {
                 ref={canvasRef}
                 width={800}
                 height={200}
-                className="w-full h-32 rounded-lg bg-[#0a0a0a] border border-[#1a1a1a] shadow-inner"
+                className="w-full h-32 rounded-lg bg-[var(--bg-main)] border border-[var(--panel-hover)] shadow-inner"
               />
             </div>
           )}
