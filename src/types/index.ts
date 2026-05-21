@@ -60,6 +60,7 @@ export interface AppState {
   resetChain: (anchorId: AnchorId) => void;
   addPattern: (pattern: Omit<Pattern, 'id' | 'createdAt' | 'status'>) => void;
   updatePatternStatus: (patternId: PatternId, status: Pattern['status']) => void;
+  reorderPatterns: (patterns: Pattern[]) => void;
   setDailyName: (date: string, name: string, achievement: string) => void;
   addBingoTask: (text: string) => void;
   toggleBingoTask: (id: string) => void;

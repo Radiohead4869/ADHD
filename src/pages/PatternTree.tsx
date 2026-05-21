@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { GitMerge, Plus, AlertCircle, Check, RotateCcw, Zap, Sparkles } from 'lucide-react';
+import { GitMerge, Plus, AlertCircle, Check, RotateCcw, Zap, Sparkles, GripVertical } from 'lucide-react';
+import { Reorder } from 'motion/react';
 
 export function PatternTree() {
-  const { patterns, addPattern, updatePatternStatus } = useStore();
+  const { patterns, addPattern, updatePatternStatus, reorderPatterns } = useStore();
   const [isCreating, setIsCreating] = useState(false);
   const [newPattern, setNewPattern] = useState({ name: '', description: '', parentId: '' });
 
@@ -41,10 +42,19 @@ export function PatternTree() {
     const StatusIcon = theme.icon;
 
     return (
-      <div key={pattern.id} className="relative flex flex-col items-start w-full">
+      <Reorder.Item 
+        key={pattern.id} 
+        value={pattern}
+        className={`relative flex flex-col items-start w-full ${depth > 0 ? 'pl-8 pt-2 pb-2' : ''}`}
+      >
+        {/* Horizontal Branch connecting this child to the stem */}
+        {depth > 0 && (
+          <div className="absolute left-[5px] top-12 h-1 w-8 rounded-full pointer-events-none" style={{ backgroundColor: theme.color }} />
+        )}
+
         {/* Skill Node */}
         <div 
-          className={`relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 transition-all w-full max-w-lg overflow-hidden group
+          className={`relative z-10 flex items-center gap-2 sm:gap-4 p-4 rounded-xl border-2 transition-all w-full max-w-lg overflow-hidden group cursor-grab active:cursor-grabbing
             ${pattern.status === 'failed' ? 'opacity-70 saturate-50' : 'hover:scale-[1.02]'}
           `}
           style={{ 
@@ -56,7 +66,11 @@ export function PatternTree() {
           {/* Background glow */}
           <div className="absolute inset-0 z-0 pointer-events-none transition-colors" style={{ backgroundColor: theme.bg }} />
           
-          <div className="relative z-10 flex-shrink-0 w-14 h-14 rounded-full border-4 flex items-center justify-center bg-[var(--bg-main)] shadow-inner" style={{ borderColor: theme.color }}>
+          <div className="relative z-10 flex-shrink-0 flex items-center justify-center text-[var(--text-dim)] hover:text-[var(--primary)] transition-colors">
+            <GripVertical className="w-5 h-5" />
+          </div>
+
+          <div className="relative z-10 flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full border-4 flex items-center justify-center bg-[var(--bg-main)] shadow-inner" style={{ borderColor: theme.color }}>
             <StatusIcon className="w-6 h-6" style={{ color: theme.color }} />
           </div>
           
@@ -98,20 +112,14 @@ export function PatternTree() {
         
         {/* Child Skills (Branches) */}
         {children.length > 0 && (
-           <div className="relative w-full pt-6 ml-10 flex flex-col gap-6" style={{ opacity: pattern.status === 'failed' ? 0.5 : 1 }}>
+           <Reorder.Group axis="y" values={children} onReorder={reorderPatterns} className="relative w-full pt-6 ml-10 flex flex-col gap-6" style={{ opacity: pattern.status === 'failed' ? 0.5 : 1 }}>
              {/* Vertical Stem connecting to parent */}
-             <div className="absolute left-[5px] inset-y-0 w-1 rounded-full" style={{ backgroundColor: theme.color, bottom: '2rem' }} />
+             <div className="absolute left-[5px] inset-y-0 w-1 rounded-full pointer-events-none" style={{ backgroundColor: theme.color, bottom: '2rem' }} />
              
-             {children.map(child => (
-               <div key={child.id} className="relative w-full pl-8">
-                 {/* Horizontal Branch connecting this child to the stem */}
-                 <div className="absolute left-[5px] top-1/2 h-1 w-8 rounded-full" style={{ backgroundColor: theme.color, transform: 'translateY(-50%)' }} />
-                 {renderPatternNode(child.id, depth + 1)}
-               </div>
-             ))}
-           </div>
+             {children.map(child => renderPatternNode(child.id, depth + 1))}
+           </Reorder.Group>
         )}
-      </div>
+      </Reorder.Item>
     );
   };
 
@@ -206,9 +214,9 @@ export function PatternTree() {
             <p className="font-bold text-lg">习惯链空空如也，从一个极小的微习惯开始吧。</p>
           </div>
         ) : (
-          <div className="space-y-12 relative z-10 px-4 py-8">
+          <Reorder.Group axis="y" values={rootPatterns} onReorder={reorderPatterns} className="space-y-12 relative z-10 px-4 py-8 w-full max-w-full">
             {rootPatterns.map(p => renderPatternNode(p.id))}
-          </div>
+          </Reorder.Group>
         )}
       </div>
     </div>

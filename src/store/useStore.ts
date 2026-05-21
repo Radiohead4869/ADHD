@@ -98,8 +98,18 @@ export const useStore = create<AppState>()(
         }]
       })),
 
+      reorderPatterns: (newOrder: Pattern[]) => set((state) => {
+        const newPatterns = [...state.patterns];
+        const currentIndices = newOrder.map(p => state.patterns.findIndex(sp => sp.id === p.id)).sort((a, b) => a - b);
+        
+        currentIndices.forEach((index, i) => {
+          newPatterns[index] = newOrder[i];
+        });
+
+        return { patterns: newPatterns };
+      }),
+
       updatePatternStatus: (patternId, status) => set((state) => {
-        // If a pattern fails, all its children must also fail (RSIP logic)
         if (status === 'failed') {
           const failTree = (id: string, currentPatterns: Pattern[]): Pattern[] => {
             let updated = currentPatterns.map(p => p.id === id ? { ...p, status: 'failed' as const } : p);
