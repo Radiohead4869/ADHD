@@ -7,6 +7,7 @@ import { PatternTree } from './pages/PatternTree';
 import { BacktrackMap } from './pages/BacktrackMap';
 import { DailyNaming } from './pages/DailyNaming';
 import { VoiceCoach } from './pages/VoiceCoach';
+import { BingoBoard } from './pages/BingoBoard';
 import { ActiveSession } from './components/ActiveSession';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/backtrack" element={<BacktrackMap />} />
           <Route path="/daily" element={<DailyNaming />} />
           <Route path="/coach" element={<VoiceCoach />} />
+          <Route path="/bingo" element={<BingoBoard />} />
         </Routes>
         <ActiveSession />
       </Layout>

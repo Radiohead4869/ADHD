@@ -10,6 +10,24 @@ export const useStore = create<AppState>()(
       sessions: [],
       patterns: [],
       dailyRecords: {},
+      bingoTasks: [
+        { id: uuidv4(), text: '喝一杯水', completed: false },
+        { id: uuidv4(), text: '伸一个懒腰', completed: false },
+        { id: uuidv4(), text: '闭眼深呼吸三次', completed: false },
+        { id: uuidv4(), text: '整理一下桌面', completed: false },
+        { id: uuidv4(), text: '回复一条消息', completed: false },
+        { id: uuidv4(), text: '站起来走两步', completed: false },
+        { id: uuidv4(), text: '写下今天重要的一件事', completed: false },
+        { id: uuidv4(), text: '吃个水果或补充剂', completed: false },
+        { id: uuidv4(), text: '看一眼窗外远方', completed: false },
+        { id: uuidv4(), text: '洗把脸清醒一下', completed: false },
+        { id: uuidv4(), text: '听一首喜欢的歌', completed: false },
+        { id: uuidv4(), text: '把身边的垃圾扔掉', completed: false },
+        { id: uuidv4(), text: '活动一下脖子', completed: false },
+        { id: uuidv4(), text: '梳一下头发', completed: false },
+        { id: uuidv4(), text: '给植物浇水或者摸摸宠物', completed: false },
+        { id: uuidv4(), text: '对自己微笑一下', completed: false },
+      ],
       currentSessionId: null,
 
       addAnchor: (anchorData) => set((state) => ({
@@ -104,6 +122,24 @@ export const useStore = create<AppState>()(
           ...state.dailyRecords,
           [date]: { date, name, achievement }
         }
+      })),
+
+      addBingoTask: (text) => set((state) => ({
+        bingoTasks: [...state.bingoTasks, { id: uuidv4(), text, completed: false }]
+      })),
+
+      toggleBingoTask: (id) => set((state) => ({
+        bingoTasks: state.bingoTasks.map(t => 
+          t.id === id ? { ...t, completed: !t.completed } : t
+        )
+      })),
+
+      removeBingoTask: (id) => set((state) => ({
+        bingoTasks: state.bingoTasks.filter(t => t.id !== id)
+      })),
+
+      clearBingoBoard: () => set(() => ({
+        bingoTasks: []
       }))
     }),
     {

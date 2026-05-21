@@ -38,11 +38,18 @@ export interface DailyRecord {
   achievement: string;
 }
 
+export interface BingoTask {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
 export interface AppState {
   anchors: Anchor[];
   sessions: FocusSession[];
   patterns: Pattern[];
   dailyRecords: Record<string, DailyRecord>;
+  bingoTasks: BingoTask[];
   currentSessionId: SessionId | null;
   
   // Actions
@@ -54,4 +61,8 @@ export interface AppState {
   addPattern: (pattern: Omit<Pattern, 'id' | 'createdAt' | 'status'>) => void;
   updatePatternStatus: (patternId: PatternId, status: Pattern['status']) => void;
   setDailyName: (date: string, name: string, achievement: string) => void;
+  addBingoTask: (text: string) => void;
+  toggleBingoTask: (id: string) => void;
+  removeBingoTask: (id: string) => void;
+  clearBingoBoard: () => void;
 }
